@@ -1,30 +1,43 @@
 #!/bin/bash
-set -e
 
-echo "Starting installation..."
+# Exit on any error, undefined variables, and pipe failures
+set -euo pipefail
 
-# 1. Detect Package Manager and Install Dependencies
-if [ -x "$(command -v apt-get)" ]; then
-    sudo apt-get update
-    sudo apt-get install -y fortune-mod cowsay
-elif [ -x "$(command -v dnf)" ]; then
-    sudo dnf install -y fortune-mod cowsay
-elif [ -x "$(command -v pacman)" ]; then
-    sudo pacman -S --noconfirm fortune-mod cowsay
-elif [ -x "$(command -v brew)" ]; then
-    brew install fortune cowsay
-else
-    echo "Error: Could not detect a supported package manager."
-    exit 1
-fi
+# Configuration
+APP_NAME="myfortune"
+INSTALL_PATH="/usr/local/bin/$APP_NAME"
+REPO_URL="https://raw.githubusercontent.com/fadi-chekkour/myfortune/main/myfortune"
 
-# 2. Download 'myfortune' directly to the destination
-echo "Downloading 'myfortune' from GitHub..."
-sudo curl -s -L https://raw.githubusercontent.com/fadi-chekkour/myfortune/main/myfortune -o /usr/local/bin/myfortune
+log() { echo -e "\e[32m[INFO]\e[0m $1"; }
+error() { echo -e "\e[31m[ERROR]\e[0m $1" >&2; exit 1; }
 
-# 3. Ensure it is executable
-sudo chmod +x /usr/local/bin/myfortune
+install_dependencies() {
+    log "Detecting package manager..."
+    if command -v apt-get &> /dev/null; then
+        sudo apt-get update && sudo apt-get install -y fortune-mod cowsay
+    elif command -v dnf &> /dev/null; then
+        sudo dnf install -y fortune-mod cowsay
+    elif command -v pacman &> /dev/null; then
+        sudo pacman -S --noconfirm fortune-mod cowsay
+    elif command -v brew &> /dev/null; then
+        brew install fortune cowsay
+    else
+        error "No supported package manager found."
+    fi
+}
 
-echo "------------------------------------------"
-echo "Installation complete!"
-echo "You can now run the command by typing: myfortune"
+install_app() {
+    log "Downloading $APP_NAME..."
+    sudo curl -s -L "$REPO_URL" -o "$INSTALL_PATH"
+    sudo chmod +x "$INSTALL_PATH"
+    log "Successfully installed to $INSTALL_PATH"
+}
+
+# Main Execution
+main() {
+    install_dependencies
+    install_app
+    log "Installation complete! Run '$APP_NAME' to start."
+}
+
+main
