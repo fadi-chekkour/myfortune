@@ -1,49 +1,28 @@
 #!/bin/bash
-
-# Exit immediately if any command exits with a non-zero status
 set -e
 
 echo "Starting installation..."
 
 # 1. Detect Package Manager and Install Dependencies
 if [ -x "$(command -v apt-get)" ]; then
-    echo "Detected Debian/Ubuntu system..."
     sudo apt-get update
-    sudo apt-get install -y fortune cowsay
+    sudo apt-get install -y fortune-mod cowsay
 elif [ -x "$(command -v dnf)" ]; then
-    echo "Detected Fedora/RHEL system..."
     sudo dnf install -y fortune-mod cowsay
 elif [ -x "$(command -v pacman)" ]; then
-    echo "Detected Arch Linux system..."
     sudo pacman -S --noconfirm fortune-mod cowsay
 elif [ -x "$(command -v brew)" ]; then
-    echo "Detected macOS system..."
     brew install fortune cowsay
 else
     echo "Error: Could not detect a supported package manager."
     exit 1
 fi
 
-# 2. Download and install the 'myfortune' command
-echo "Downloading 'myfortune' binary from GitHub..."
-
-# Download the file directly to /usr/local/bin
+# 2. Download 'myfortune' directly to the destination
+echo "Downloading 'myfortune' from GitHub..."
 sudo curl -s -L https://raw.githubusercontent.com/fadi-chekkour/myfortune/main/myfortune -o /usr/local/bin/myfortune
 
-# Make it executable
-sudo chmod +x /usr/local/bin/myfortune
-
-# Check if it was successfully placed
-if [ -f "/usr/local/bin/myfortune" ]; then
-    echo "Installation complete!"
-else
-    echo "Error: Failed to download myfortune."
-    exit 1
-fi
-
-# 3. Install the 'myfortune' command
-echo "Installing 'myfortune' to /usr/local/bin..."
-sudo cp myfortune /usr/local/bin/
+# 3. Ensure it is executable
 sudo chmod +x /usr/local/bin/myfortune
 
 echo "------------------------------------------"
