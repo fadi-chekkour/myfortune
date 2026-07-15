@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Exit immediately if any command exits with a non-zero status
+set -e
+
 echo "Starting installation..."
 
 # 1. Detect Package Manager and Install Dependencies
@@ -17,11 +20,17 @@ elif [ -x "$(command -v brew)" ]; then
     echo "Detected macOS system..."
     brew install fortune cowsay
 else
-    echo "Error: Could not detect a supported package manager (apt, dnf, pacman, or brew)."
+    echo "Error: Could not detect a supported package manager."
     exit 1
 fi
 
-# 2. Install the 'myfortune' command
+# 2. Check for the existence of the source file
+if [ ! -f "myfortune" ]; then
+    echo "Error: 'myfortune' file not found in the current directory."
+    exit 1
+fi
+
+# 3. Install the 'myfortune' command
 echo "Installing 'myfortune' to /usr/local/bin..."
 sudo cp myfortune /usr/local/bin/
 sudo chmod +x /usr/local/bin/myfortune
