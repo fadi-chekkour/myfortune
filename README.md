@@ -4,5 +4,5 @@ A simple terminal tool that runs: `fortune | cowsay -f tux`
 ## Installation
 Run this command in your terminal:
 ```bash
-curl -s [https://raw.githubusercontent.com/fadi-chekkour/myfortune/main/install.sh](https://raw.githubusercontent.com/fadi-chekkour/myfortune/main/install.sh) | bash
+curl -s https://raw.githubusercontent.com/fadi-chekkour/myfortune/main/install.sh | bash
 
