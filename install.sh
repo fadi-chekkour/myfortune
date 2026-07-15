@@ -24,9 +24,20 @@ else
     exit 1
 fi
 
-# 2. Check for the existence of the source file
-if [ ! -f "myfortune" ]; then
-    echo "Error: 'myfortune' file not found in the current directory."
+# 2. Download and install the 'myfortune' command
+echo "Downloading 'myfortune' from GitHub..."
+
+# We use sudo here because /usr/local/bin requires root permissions
+sudo curl -s -L https://raw.githubusercontent.com/fadi-chekkour/myfortune/main/myfortune -o /usr/local/bin/myfortune
+
+# Ensure the file is executable
+sudo chmod +x /usr/local/bin/myfortune
+
+# Verify the download succeeded
+if [ -f "/usr/local/bin/myfortune" ]; then
+    echo "Installation complete!"
+else
+    echo "Error: Failed to download myfortune."
     exit 1
 fi
 
