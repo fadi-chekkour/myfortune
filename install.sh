@@ -25,15 +25,15 @@ else
 fi
 
 # 2. Download and install the 'myfortune' command
-echo "Downloading 'myfortune' from GitHub..."
+echo "Downloading 'myfortune' binary from GitHub..."
 
-# We use sudo here because /usr/local/bin requires root permissions
+# Download the file directly to /usr/local/bin
 sudo curl -s -L https://raw.githubusercontent.com/fadi-chekkour/myfortune/main/myfortune -o /usr/local/bin/myfortune
 
-# Ensure the file is executable
+# Make it executable
 sudo chmod +x /usr/local/bin/myfortune
 
-# Verify the download succeeded
+# Check if it was successfully placed
 if [ -f "/usr/local/bin/myfortune" ]; then
     echo "Installation complete!"
 else
